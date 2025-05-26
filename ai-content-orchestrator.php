@@ -17,14 +17,14 @@ function aicp_generate_content_and_post($topic, $language, $category_id, $auto_p
     }
 
     if (empty($title) || strlen($title) < 5) {
-        $title = ContentWriter::generate_title_from_content($content);
+        $title = ContentWriter::generate_title_from_content($content, $topic);
         if (!$title || strlen($title) < 5) {
             $title = ContentWriter::fallbackTitleFromContent($content, $topic);
         }
     }
 
-    // Focus keyword oluştur
-    $focus_keyword = strtolower(trim(explode(' ', $topic)[0]));
+    // Focus keyword oluştur (TÜM TOPIC, ilk kelime değil!)
+    $focus_keyword = trim($topic);
 
     // SEO meta oluştur
     $seo = SeoMetaBuilder::build($content, $focus_keyword);
@@ -48,8 +48,8 @@ function aicp_generate_content_and_post($topic, $language, $category_id, $auto_p
         return false;
     }
 
-    // SEO verilerini post meta olarak ekle
-    SeoMetaBuilder::apply_to_post($post_id, $content, $title);
+    // SEO verilerini post meta olarak ekle (focus_keyword TAM GELİYOR!)
+    SeoMetaBuilder::apply_to_post($post_id, $content, $title, $focus_keyword);
 
     // SEO puanı logla
     $log_entry = sprintf(

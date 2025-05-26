@@ -69,14 +69,22 @@ class SeoMetaBuilder {
 
     /**
      * WordPress gönderisine SEO meta verileri uygular.
+     * Artık dışarıdan focusKeyword parametresi alır ve ilk kelimeyi almaz!
      */
-    public static function apply_to_post($post_id, $content, $title = '') {
+    public static function apply_to_post($post_id, $content, $title = '', $focusKeyword = '') {
         if (!$post_id || empty($content)) return false;
 
-        $focusKeyword = strtolower(trim(explode(' ', wp_strip_all_tags($title))[0]));
+        // $focusKeyword parametresi boşsa eski yöntemi uygula, doluysa doğrudan kullan
+        if (empty($focusKeyword)) {
+            // Yine de tam başlığı kullan!
+            $focusKeyword = trim(wp_strip_all_tags($title));
+        }
+
         $seo_data = self::build($content, $focusKeyword);
 
         update_post_meta($post_id, '_yoast_wpseo_focuskw', $focusKeyword);
+        update_post_meta($post_id, '_yoast_wpseo_focuskw_text_input', $focusKeyword);
+        update_post_meta($post_id, '_yoast_wpseo_focuskeywords', $focusKeyword);
         update_post_meta($post_id, '_yoast_wpseo_metadesc', $seo_data['meta_desc']);
         update_post_meta($post_id, '_yoast_wpseo_title', $seo_data['meta_title']);
 

@@ -268,7 +268,7 @@ EOT;
         }
 
         private static function generateImageFromPrompt($prompt) {
-            $api_key = '9f62c69574e0741a2a5a481c910e97f47b890fb23c19a43889806baa784debdb';
+            $api_key = '4e2e656b23a2b3fdba743967080998af9642e18f9c16dac48b5295bb05bc3aee';
 
             $postData = [
                 "model" => "stabilityai/sdxl-turbo:free",
